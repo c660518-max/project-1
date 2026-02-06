@@ -1,0 +1,28 @@
+clc;
+clear;
+R1 = 33000;        
+R2 = 10000;        
+Vref = 3.3;        
+N = 12;           
+ADCmax = 2^N - 1;
+ADC_read = 2048;   
+Vadc = (ADC_read / ADCmax) * Vref;
+Vin  = Vadc * (R1 + R2) / R2;
+disp(Vin)
+
+
+clc;
+clear;
+% Voltage Divider & ADC Simulation
+Vin = 0:0.1:24;          
+R1 = 100000;            
+R2 = 15000;              
+V_ref = 3.3;            
+ADC_bits = 10;           
+Vout = Vin .* (R2 / (R1 + R2));
+levels = 2^ADC_bits;
+digital_values = round((Vout ./ V_ref) .* (levels - 1));
+V_measured = (digital_values .* V_ref ./ (levels - 1)) .* ((R1 + R2) / R2);
+plot(Vin, V_measured, 'LineWidth', 1.5);
+xlabel('Actual Input Voltage (V)'); ylabel('Measured Voltage (V)');
+title('ADC Voltage Reconstruction Accuracy'); grid on;
